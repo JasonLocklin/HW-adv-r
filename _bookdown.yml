@@ -1,4 +1,5 @@
 new_session: yes
+book_filename: "Hadley-Wickham_Advanced-r-2nd-edition"
 output_format:
   - bookdown::bs4_book
   - bookdown::gitbook
