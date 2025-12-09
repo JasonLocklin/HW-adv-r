@@ -1,4 +1,8 @@
 new_session: yes
+output_format:
+  - bookdown::bs4_book
+  - bookdown::gitbook
+  - bookdown::epub_book
 delete_merged_file: yes
 
 rmd_files:
