@@ -41,12 +41,12 @@ jobs:
           key: bookdown-${{ hashFiles('**/*Rmd') }}
           restore-keys: bookdown-
 
-      - name: Build site + EPUB
+      - name: Build site
         run: bookdown::render_book("index.Rmd", quiet = TRUE)
         shell: Rscript {0}
         
-      - name: Build site + EPUB
-        run: bookdown::render_book("index.Rmd", output_format = "bookdown::epub_book")
+      - name: EPUB
+        run: bookdown::render_book("index.Rmd", output_format = "bookdown::epub_book", quiet = TRUE)
         shell: Rscript {0}
       
       - name: List build outputs (debug)
