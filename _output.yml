@@ -4,7 +4,6 @@ bookdown::bs4_book:
   repo: https://github.com/hadley/adv-r
   includes:
     in_header: [ga_script.html]
-
 bookdown::gitbook:
   includes:
     in_header: [ga_script.html]
@@ -18,7 +17,6 @@ bookdown::gitbook:
       text: "Edit"
     sharing: no
   css: adv-r.css
-
 bookdown::pdf_book:
   includes:
     in_header: latex/preamble.tex
@@ -33,3 +31,7 @@ bookdown::pdf_book:
   quote_footer: ["\\hspace*{\\fill} ", ""]
   toc_unnumbered: false
   number_sections: true
+bookdown::epub_book:
+  chapter_level: 1
+  stylesheet: adv-r.css
+  pandoc_args: ["--dpi=96"]
