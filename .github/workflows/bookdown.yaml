@@ -1,5 +1,6 @@
+
+# .github/workflows/bookdown.yml
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
-# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
     branches: [main, master]
@@ -18,7 +19,7 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: r-lib/actions/setup-pandoc@v2
 
@@ -27,6 +28,11 @@ jobs:
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          # optional: ensure key packages present even if there's no DESCRIPTION/renv
+          extra-packages: |
+            any::bookdown
+            any::rmarkdown
 
       - name: Cache bookdown results
         uses: actions/cache@v3
@@ -35,15 +41,28 @@ jobs:
           key: bookdown-${{ hashFiles('**/*Rmd') }}
           restore-keys: bookdown-
 
-      - name: Build site
+      - name: Build site + EPUB
         run: bookdown::render_book("index.Rmd", quiet = TRUE)
         shell: Rscript {0}
 
+      - name: List build outputs (debug)
+        run: ls -la _book
+
+      # Upload the website artifact for Pages deployment
       - name: Upload website artifact
         if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' }}
         uses: actions/upload-pages-artifact@v3
         with:
           path: "_book"
+
+      # NEW: Upload the EPUB as a downloadable artifact
+      - name: Upload EPUB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: book-epub
+          path: |
+            _book/*.epub
+          if-no-files-found: error
 
   deploy:
     needs: build
